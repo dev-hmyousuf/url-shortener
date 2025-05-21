@@ -8,40 +8,52 @@ import { storeClicks } from "@/db/apiClicks";
 const RedirectLink = () => {
   const { id } = useParams();
 
-  const { loading, data, fn } = useFetch(getLongUrl, id);
-  const { loading: loadingStats, fn: fnStats } = useFetch(storeClicks, {
-    id: data?.id,
-    originalUrl: data?.original_url,
+  // Step 1: Fetch long URL
+  const {
+    loading: loadingUrl,
+    data: urlData,
+    fn: fetchUrl,
+  } = useFetch(getLongUrl, id);
+
+  // Step 2: Store click
+  const {
+    loading: loadingClick,
+    fn: storeClick,
+  } = useFetch(storeClicks, {
+    id: urlData?.id,
+    originalUrl: urlData?.original_url,
   });
 
+  // Fetch URL on mount
   useEffect(() => {
-    fn();
+    fetchUrl();
   }, []);
 
+  // Store click after URL is fetched
   useEffect(() => {
-    if (!loading && data) {
-      fnStats();
+    if (!loadingUrl && urlData) {
+      storeClick();
     }
-  }, [loading, data]);
+  }, [loadingUrl, urlData]);
 
+  // Redirect once both fetch and store are complete
   useEffect(() => {
-    if (data?.original_url && !loading && !loadingStats) {
-      // Redirect after clicks are stored
-      window.location.href = data.original_url;
+    if (urlData?.original_url && !loadingUrl && !loadingClick) {
+      window.location.href = urlData.original_url;
     }
-  }, [data, loading, loadingStats]);
+  }, [urlData, loadingUrl, loadingClick]);
 
-  if (loading || loadingStats) {
-    return (
-      <>
-        <BarLoader width={"100%"} color="#36d7b7" />
-        <br />
-        <div className="text-white">Redirecting...</div>
-      </>
-    );
-  }
-
-  return null;
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-4">
+      <BarLoader width={"100%"} color="#36d7b7" />
+      <h1 className="text-xl mt-6 animate-pulse text-center">
+        🔗 Redirecting to your destination...
+      </h1>
+      <p className="text-sm mt-2 text-gray-400">
+        Please wait while we track the click and redirect you.
+      </p>
+    </div>
+  );
 };
 
 export default RedirectLink;
