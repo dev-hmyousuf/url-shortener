@@ -15,6 +15,8 @@ import {BarLoader} from "react-spinners";
 import {Button} from "./ui/button";
 import {UrlState} from "@/context";
 
+const logo = './icon.png'
+
 const Header = () => {
   const {loading, fn: fnLogout} = useFetch(logout);
   const navigate = useNavigate();
@@ -23,23 +25,23 @@ const Header = () => {
 
   return (
     <>
-      <nav className="py-4 flex justify-between items-center">
+      <nav className="py-4 bg-white p-2 rounded-xl flex justify-between items-center top-5 sticky">
         <Link to="/">
-          <img src="/logo.png" className="h-16" alt="Trimrr Logo" />
+          <img src={logo} className="h-16" alt="Trimrr Logo" />
         </Link>
         <div className="flex gap-4">
           {!user ? (
             <Button onClick={() => navigate("/auth")}>Login</Button>
           ) : (
             <DropdownMenu>
-              <DropdownMenuTrigger className="w-10 rounded-full overflow-hidden">
+              <DropdownMenuTrigger className="w-10 h-10 rounded-full overflow-hidden">
                 <Avatar>
-                  <AvatarImage src={user?.user_metadata?.profile_pic} />
+                  <AvatarImage src={user?.user_metadata?.profilepic} />
                   <AvatarFallback>PA</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>
+                <DropdownMenuLabel >
                   {user?.user_metadata?.name}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
