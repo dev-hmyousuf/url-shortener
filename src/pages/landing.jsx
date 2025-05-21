@@ -19,7 +19,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-10">
       <h2 className="my-10 sm:my-16 text-3xl sm:text-6xl lg:text-7xl text-white text-center font-extrabold">
         The only URL Shortener <br /> you&rsquo;ll ever need! 👇
       </h2>
@@ -38,10 +38,7 @@ const LandingPage = () => {
           Shorten!
         </Button>
       </form>
-      <img
-        src="/banner1.jpg" // replace with 2 in small screens
-        className="w-full my-11 md:px-11"
-      />
+
       <Accordion type="multiple" collapsible className="w-full md:px-11">
         <AccordionItem value="item-1">
           <AccordionTrigger>
